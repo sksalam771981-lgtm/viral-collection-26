@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="referrer" content="no-referrer">
+    <title>VIRAL COLLECTION 26 - Master Control</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+    <style>
+        * { font-family: 'Hind Siliguri', sans-serif; }
+        .font-poppins { font-family: 'Poppins', sans-serif; }
+        .admin-menu-card {
+            background: linear-gradient(145deg, #16192b, #0f111e);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .admin-menu-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(236, 72, 153, 0.45);
+            box-shadow: 0 12px 28px -5px rgba(236, 72, 153, 0.25);
+        }
+        .toast-notify {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            background: rgba(15, 23, 42, 0.95);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+            color: #10b981;
+            padding: 8px 20px;
+            border-radius: 25px;
+            font-size: 12px;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            z-index: 999999;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .toast-notify.show {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-[#090b14] text-slate-100 min-h-screen pb-20">
+
+    <!-- গ্লোবাল নোটিফিকেশন টোস্ট -->
+    <div id="adminToast" class="toast-notify">
+        <i class="fa-solid fa-check text-[11px]"></i>
+        <span id="adminToastMsg">Copied!</span>
+    </div>
+
+    <!-- হেডার: VIRAL COLLECTION 26 বড় লোগো ও ব্র্যান্ডিং -->
+    <header class="bg-[#101322]/90 border-b border-slate-800/80 px-4 md:px-6 py-3 sticky top-0 z-50 backdrop-blur-md flex justify-between items-center shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-cyan-500 via-purple-600 to-pink-500 flex items-center justify-center text-white text-lg font-black shadow-lg shadow-pink-500/20">
+                <i class="fa-solid fa-play"></i>
+            </div>
+            <div>
+                <span class="text-sm md:text-lg font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400 font-poppins tracking-wider block uppercase">
+                    VIRAL COLLECTION 26
+                </span>
+                <span class="text-[9.5px] text-slate-400 font-poppins block -mt-0.5">Master Studio Control</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-2.5">
+            <span class="bg-emerald-500/10 text-emerald-400 text-[10px] md:text-[11px] font-bold px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5 font-poppins">
+                <span class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></span> Dual Engine
+            </span>
+            <button onclick="openSection('section-firebase')" class="text-amber-400 hover:text-amber-300 p-1" title="Firebase Settings"><i class="fa-solid fa-fire text-base"></i></button>
+            <button onclick="openSection('section-settings')" class="text-slate-400 hover:text-white p-1" title="Settings"><i class="fa-solid fa-gear text-base"></i></button>
+        </div>
+    </header>
+
+    <!-- মেইন ড্যাশবোর্ড মেনু -->
+    <main id="dashboard-view" class="max-w-md mx-auto p-4 space-y-5 pt-5">
+        <div class="text-center space-y-1">
+            <h1 class="text-xl md:text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-pink-400 to-purple-400 font-poppins flex items-center justify-center gap-2">
+                <span>⚡</span> VIRAL COLLECTION 26
+            </h1>
+            <p class="text-xs text-slate-400 font-poppins">Telegram (≤20MB) &amp; Catbox (&gt;20MB) Hybrid Engine</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3.5 pt-2">
+            <!-- কার্ড ১ -->
+            <div onclick="openSection('section-videos')" class="admin-menu-card rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer min-h-[140px] shadow-lg border border-pink-500/30">
+                <div class="w-12 h-12 rounded-2xl bg-pink-500/10 flex items-center justify-center text-pink-400 text-2xl mb-2.5 shadow-inner">
+                    <i class="fa-solid fa-play"></i>
+                </div>
+                <span class="text-xs md:text-sm font-bold text-white block">পোস্ট ও ভিডিও লিস্ট</span>
+                <span class="text-[10px] text-pink-400 font-poppins mt-0.5" id="dash-total-videos">0 Posts</span>
+            </div>
+
+            <!-- কার্ড ২ -->
+            <div onclick="openSection('section-categories')" class="admin-menu-card rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer min-h-[140px] shadow-lg">
+                <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 text-2xl mb-2.5 shadow-inner">
+                    <i class="fa-solid fa-layer-group"></i>
+                </div>
+                <span class="text-xs md:text-sm font-bold text-white block">ক্যাটাগরি</span>
+                <span class="text-[10px] text-slate-400 font-poppins mt-0.5" id="dash-total-cats">0 Categories</span>
+            </div>
+
+            <!-- কার্ড ৩ -->
+            <div onclick="openSection('section-links')" class="admin-menu-card rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer min-h-[140px] shadow-lg">
+                <div class="w-12 h-12 rounded-2xl bg-sky-500/10 flex items-center justify-center text-sky-400 text-2xl mb-2.5 shadow-inner">
+                    <i class="fa-solid fa-bars-staggered"></i>
+                </div>
+                <span class="text-xs md:text-sm font-bold text-white block">ড্রয়ার মেনু ও লিংক</span>
+                <span class="text-[10px] text-sky-400 font-poppins mt-0.5">Change Titles &amp; Links</span>
+            </div>
+
+            <!-- কার্ড ৪ -->
+            <div onclick="openSection('section-firebase')" class="admin-menu-card rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer min-h-[140px] shadow-lg">
+                <div class="w-12 h-12 rounded-2xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-2xl mb-2.5 shadow-inner">
+                    <i class="fa-solid fa-fire"></i>
+                </div>
+                <span class="text-xs md:text-sm font-bold text-white block">ফায়ারবেস কোড পেস্ট</span>
+                <span class="text-[10px] text-amber-400 font-poppins mt-0.5">collection-cae5f</span>
+            </div>
+
+            <!-- কার্ড ৫ -->
+            <div onclick="openSection('section-settings')" class="admin-menu-card rounded-3xl p-5 flex flex-col items-center justify-center text-center cursor-pointer min-h-[140px] shadow-lg col-span-2">
+                <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-2xl mb-2.5 shadow-inner">
+                    <i class="fa-solid fa-sliders"></i>
+                </div>
+                <span class="text-xs md:text-sm font-bold text-white block">টেলিগ্রাম, Catbox ও ডোমেইন সেটিংস</span>
+                <span class="text-[10px] text-cyan-400 font-poppins mt-0.5">Bot Token, Worker &amp; Proxy</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- সাব-সেকশন কন্টেইনার -->
+    <div id="sub-sections-container" class="hidden max-w-4xl mx-auto p-3 md:p-4 space-y-6">
+        <button onclick="backToDashboard()" class="bg-[#16192b] hover:bg-purple-900/40 text-purple-300 border border-purple-500/30 px-4 py-2 rounded-2xl text-xs font-bold transition flex items-center gap-2 shadow">
+            <i class="fa-solid fa-arrow-left"></i> <span>মেইন ড্যাশবোর্ডে ফিরে যান</span>
+        </button>
+
+        <!-- ১. পোস্ট ও ভিডিও আপলোড ফর্ম -->
+        <div id="section-videos" class="admin-section hidden space-y-6">
+            <div id="post-form-card" class="bg-[#121526] border border-slate-800 rounded-3xl p-4 md:p-5 shadow-xl space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <h2 id="form-heading" class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-pink-500"></i> নতুন পোস্ট / ভিডিও তৈরি করুন
+                    </h2>
+                    <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden bg-slate-800 hover:bg-slate-700 text-xs px-3.5 py-1.5 rounded-lg text-slate-200 transition">
+                        <i class="fa-solid fa-xmark"></i> এডিট বাতিল
+                    </button>
+                </div>
+
+                <input type="hidden" id="edit-post-id" value="">
+
+                <!-- টাইটেল -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-300 block">
+                        পোস্টের শিরোনাম (Title) <span class="text-slate-500 text-[10px] font-normal">(ঐচ্ছিক - খালি রাখলেও চলবে)</span>:
+                    </label>
+                    <div class="relative flex items-center">
+                        <input type="text" id="post-title" placeholder="পোস্টের শিরোনাম লিখুন (ঐচ্ছিক)..." class="w-full bg-[#090b14] border border-slate-700 p-3 pr-11 rounded-2xl text-xs text-white outline-none focus:border-pink-500 transition">
+                        <button type="button" onclick="copyInputField('post-title')" class="absolute right-2.5 bg-slate-800 hover:bg-pink-600 active:scale-90 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl text-xs transition border border-slate-700" title="কপি করুন">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ক্যাটাগরি -->
+                <div class="space-y-1.5">
+                    <label class="text-xs font-semibold text-slate-300 block">ক্যাটাগরি সিলেক্ট করুন:</label>
+                    <select id="post-category" class="w-full bg-[#090b14] border border-slate-700 p-3 rounded-2xl text-xs text-white outline-none focus:border-pink-500 transition cursor-pointer">
+                        <option value="">-- ক্যাটাগরি সিলেক্ট করুন (ডিফল্ট: General) --</option>
+                    </select>
+                </div>
+
+                <!-- থাম্বনেইল ফটো (টেলিগ্রাম ক্লাউড) -->
+                <div class="space-y-2.5 bg-[#090b14]/80 p-4 rounded-2xl border border-slate-800">
+                    <label class="text-xs font-semibold text-slate-300 flex justify-between items-center">
+                        <span class="flex items-center gap-1.5">
+                            <i class="fa-brands fa-telegram text-cyan-400"></i> থাম্বনেইল ফটো (Telegram Cloud):
+                        </span>
+                        <span id="photo-upload-status" class="text-[10px] text-cyan-400 font-poppins font-semibold"></span>
+                    </label>
+
+                    <label for="thumb-file-input" class="w-full bg-gradient-to-r from-cyan-600 via-indigo-600 to-purple-600 hover:opacity-95 active:scale-95 text-white text-xs font-bold py-3 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 transition shadow-lg">
+                        <i class="fa-solid fa-camera-retro text-amber-300"></i>
+                        <span>গ্যালারি থেকে ফটো আপলোড (সরাসরি টেলিগ্রামে সেভ হবে)</span>
+                    </label>
+                    <input type="file" id="thumb-file-input" accept="image/*" onchange="handleTelegramPhotoUpload(this)" class="hidden">
+
+                    <div id="photo-progress-bar-wrap" class="hidden space-y-1 pt-1">
+                        <div class="w-full bg-slate-700 h-1.5 rounded-full overflow-hidden">
+                            <div id="photo-progress-fill" class="bg-gradient-to-r from-cyan-400 to-emerald-400 h-full w-0 transition-all duration-75"></div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1 pt-1">
+                        <label class="text-[11px] text-slate-400 block font-semibold">ছবির সরাসরি স্থায়ী লিঙ্ক (URL):</label>
+                        <div class="relative flex items-center">
+                            <input type="text" id="post-thumb-data" oninput="handleManualThumbUrl(this.value)" placeholder="https://..." class="w-full bg-[#121526] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-emerald-400 font-poppins outline-none focus:border-cyan-500 transition">
+                            <button type="button" onclick="copyInputField('post-thumb-data')" class="absolute right-2 bg-slate-800 hover:bg-cyan-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- প্রিভিউ ছবি -->
+                    <div id="photo-preview-box" class="hidden pt-2">
+                        <img id="photo-preview-img" src="" referrerpolicy="no-referrer" class="w-full h-52 object-cover rounded-xl border border-slate-700 shadow">
+                    </div>
+
+                    <!-- গ্যালারিতে সরাসরি ডাউনলোড বাটন (শুধুমাত্র আগে ভিডিও দিলে দৃশ্যমান হবে) -->
+                    <button type="button" id="download-thumb-btn" onclick="downloadThumbToGallery()" class="hidden w-full bg-gradient-to-r from-emerald-600 to-teal-600 hover:opacity-95 active:scale-95 text-white py-2.5 rounded-xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-lg mt-2">
+                        <i class="fa-solid fa-circle-down text-sm"></i> <span>গ্যালারিতে থাম্বনেইল সেভ করুন</span>
+                    </button>
+
+                    <!-- ফ্রেম সিলেক্টর বক্স (ভিডিও আগে দিলে দৃশ্যমান হবে) -->
+                    <div id="frame-selector-box" class="hidden bg-[#0c1022] p-3 rounded-2xl border border-slate-700 space-y-2.5 mt-2">
+                        <label class="text-[11px] font-bold text-amber-400 flex items-center justify-between">
+                            <span><i class="fa-solid fa-clock"></i> কত মিনিট ও সেকেন্ডের ফ্রেম নিবেন?</span>
+                            <span id="currentTimeDisplay" class="text-[10px] text-slate-400 font-mono">00m : 02s</span>
+                        </label>
+
+                        <div class="flex items-center gap-2">
+                            <!-- মিনিট কলাম (ভিডিও ৬০ সেকেন্ডের কম হলে স্বয়ংক্রিয় হাইড থাকবে) -->
+                            <div id="minute-col" class="flex-1 space-y-1">
+                                <span class="text-[10px] text-slate-400 block text-center">মিনিট (Min)</span>
+                                <input type="number" id="minuteInput" min="0" value="0" placeholder="0" class="w-full bg-[#141930] border border-slate-700 p-2 rounded-xl text-xs text-white outline-none focus:border-amber-400 font-mono text-center font-bold">
+                            </div>
+                            <span id="colon-separator" class="text-slate-500 font-bold pt-4">:</span>
+                            <!-- সেকেন্ড কলাম -->
+                            <div id="second-col" class="flex-1 space-y-1">
+                                <span class="text-[10px] text-slate-400 block text-center">সেকেন্ড (Sec)</span>
+                                <input type="number" id="secondInput" min="0" max="59" value="2" placeholder="2" class="w-full bg-[#141930] border border-slate-700 p-2 rounded-xl text-xs text-white outline-none focus:border-amber-400 font-mono text-center font-bold">
+                            </div>
+                            <div class="pt-4">
+                                <button type="button" onclick="applyCustomFrame()" class="bg-amber-600 hover:bg-amber-500 active:scale-95 text-white px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1 shadow">
+                                    <i class="fa-solid fa-camera"></i> <span>ফ্রেম আনুন</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- কুইক জাম্প বাটন -->
+                        <div class="flex items-center justify-center gap-1.5 pt-1 border-t border-slate-800/80">
+                            <button type="button" onclick="setQuickTime(0, 5)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">5s</button>
+                            <button type="button" onclick="setQuickTime(0, 15)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">15s</button>
+                            <button type="button" onclick="setQuickTime(0, 30)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">30s</button>
+                            <button type="button" id="quick-1m-btn" onclick="setQuickTime(1, 0)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">1 min</button>
+                            <button type="button" id="quick-2m-btn" onclick="setQuickTime(2, 0)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] px-2.5 py-1 rounded-lg">2 min</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ভিডিও ফাইলসমূহ (লাইভ MB ও % প্রগ্রেস সহ) -->
+                <div class="space-y-3 bg-[#090b14]/80 p-3.5 rounded-2xl border border-slate-800">
+                    <label class="text-xs font-bold text-slate-200 block border-b border-slate-800 pb-1.5 flex justify-between items-center">
+                        <span>ভিডিও ফাইলসমূহ:</span>
+                        <span class="text-[10px] text-cyan-400 font-poppins">≤20MB টেলিগ্রাম | &gt;20MB Catbox</span>
+                    </label>
+
+                    <div id="video-slots-container" class="space-y-3"></div>
+
+                    <button type="button" onclick="addNewVideoSlot()" class="w-full bg-[#161a2e] hover:bg-[#1f2440] active:scale-95 text-cyan-400 hover:text-cyan-300 border border-cyan-500/30 hover:border-cyan-500/60 py-3 rounded-2xl text-xs font-bold transition flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-plus text-xs"></i> <span>Add More Video Part</span>
+                    </button>
+                </div>
+
+                <!-- ভিডিও সময় / ডিউরেশন -->
+                <div class="space-y-1.5 bg-[#090b14]/80 p-3.5 rounded-2xl border border-slate-800">
+                    <label class="text-xs font-semibold text-slate-300 flex justify-between items-center">
+                        <span>ভিডিওর সময় / ডিউরেশন (Duration):</span>
+                        <span id="duration-status" class="text-[10px] text-emerald-400 font-poppins">ভিডিও থেকে অটোমেটিক বের হবে</span>
+                    </label>
+                    <div class="relative flex items-center">
+                        <input type="text" id="post-video-duration" placeholder="যেমন: 03:45 বা 26:31" class="w-full bg-[#121526] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-cyan-400 outline-none focus:border-pink-500 font-poppins transition">
+                        <button type="button" onclick="copyInputField('post-video-duration')" class="absolute right-2 bg-slate-800 hover:bg-cyan-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- আসল ডাউনলোড লিংক -->
+                <div class="space-y-1.5 bg-[#090b14]/80 p-3.5 rounded-2xl border border-slate-800">
+                    <label class="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                        <i class="fa-solid fa-download text-emerald-400"></i> আসল ডাউনলোড লিংক (ঐচ্ছিক):
+                    </label>
+                    <div class="relative flex items-center">
+                        <input type="url" id="post-download-url" placeholder="https://... (লিংক দিলে ৩য় ক্লিকে মূল ফাইলে যাবে)" class="w-full bg-[#121526] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-emerald-400 outline-none focus:border-pink-500 font-poppins transition">
+                        <button type="button" onclick="copyInputField('post-download-url')" class="absolute right-2 bg-slate-800 hover:bg-emerald-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- ভিউ ও লাইক এডিট -->
+                <div id="edit-views-wrapper" class="hidden grid grid-cols-2 gap-3 bg-[#090b14]/80 p-3.5 rounded-2xl border border-slate-800">
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-300 block">ভিউ সংখ্যা (Views):</label>
+                        <input type="number" id="post-views-data" placeholder="0" class="w-full bg-[#121526] border border-slate-700 p-2.5 rounded-xl text-xs text-emerald-400 outline-none focus:border-pink-500 font-poppins">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-semibold text-slate-300 block">লাইক সংখ্যা (Likes):</label>
+                        <input type="number" id="post-likes-data" placeholder="1" class="w-full bg-[#121526] border border-slate-700 p-2.5 rounded-xl text-xs text-pink-400 outline-none focus:border-pink-500 font-poppins">
+                    </div>
+                </div>
+
+                <!-- সাবমিট বাটন -->
+                <button onclick="publishOrUpdatePost()" id="submit-btn" class="w-full bg-gradient-to-r from-purple-600 via-pink-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-bold py-3.5 rounded-2xl text-xs shadow-lg shadow-pink-600/30 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span id="submit-btn-text">পোস্ট পাবলিশ করুন</span>
+                </button>
+
+                <div id="alert-msg" class="hidden text-center text-xs font-bold p-3.5 rounded-xl"></div>
+            </div>
+
+            <!-- সকল পোস্ট লিস্ট (সবগুলো পোস্ট নিচে দেখাবে) -->
+            <div class="bg-[#121526] border border-slate-800 rounded-3xl p-4 md:p-5 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 border-b border-slate-800 pb-3">
+                    <h2 class="text-sm font-bold text-slate-200 flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-pink-400"></i> সকল পোস্ট লিস্ট (<span id="total-count" class="font-poppins text-emerald-400">0</span>)
+                    </h2>
+                    <div class="flex items-center gap-2 w-full sm:w-auto">
+                        <input type="text" id="search-manage-input" oninput="filterAdminVideos()" placeholder="পোস্ট খুঁজুন..." class="flex-1 sm:w-56 bg-[#090b14] border border-slate-700 px-3.5 py-2 rounded-xl text-xs text-white outline-none focus:border-pink-500 transition">
+                        <button onclick="fetchVideosListLive()" class="text-xs bg-[#16192b] hover:bg-[#20253d] border border-slate-700 px-3 py-2 rounded-xl text-slate-300 transition" title="রিফ্রেশ">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="video-list-container" class="space-y-3.5">
+                    <p class="text-xs text-center text-slate-500 py-8">পোস্ট লোড হচ্ছে...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ২. ক্যাটাগরি -->
+        <div id="section-categories" class="admin-section hidden space-y-4">
+            <div class="bg-[#121526] border border-slate-800 rounded-3xl p-6 shadow-xl space-y-4">
+                <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center text-purple-400 text-lg">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-sm font-bold text-white">ক্যাটাগরি ম্যানেজার</h2>
+                            <p class="text-[11px] text-slate-400 font-poppins">Add, Rename and Delete categories</p>
+                        </div>
+                    </div>
+                    <button id="cancel-cat-btn" onclick="cancelCategoryEdit()" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-3.5 py-1.5 rounded-xl transition border border-slate-700">
+                        <i class="fa-solid fa-xmark"></i> বাতিল
+                    </button>
+                </div>
+                
+                <div class="flex flex-col sm:flex-row gap-2.5">
+                    <input type="text" id="new-category-input" placeholder="ক্যাটাগরির নাম লিখুন..." class="flex-1 bg-[#090b14] border border-slate-700 p-3 rounded-2xl text-xs text-white outline-none focus:border-pink-500 transition">
+                    <button onclick="saveOrUpdateCategory()" id="cat-submit-btn" class="bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 active:scale-95 text-white text-xs font-bold px-6 py-3 rounded-2xl transition flex items-center justify-center gap-2 shadow">
+                        <i class="fa-solid fa-check"></i> <span id="cat-btn-text">ক্যাটাগরি যুক্ত করুন</span>
+                    </button>
+                </div>
+
+                <div class="space-y-2 pt-2">
+                    <span class="text-[11px] text-slate-400 font-semibold block">সেভ করা ক্যাটাগরি তালিকা:</span>
+                    <div id="saved-categories-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                        <span class="text-xs text-slate-500">লোড হচ্ছে...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ৩. ড্রয়ার মেনু ও লিংক সেটিংস -->
+        <div id="section-links" class="admin-section hidden space-y-4">
+            <div class="bg-[#121526] border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
+                <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 flex items-center justify-center text-sky-400 text-lg">
+                        <i class="fa-solid fa-bars-staggered"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-white">সাইডবার ড্রয়ারের নাম ও লিংক সেটিংস</h2>
+                        <p class="text-[11px] text-slate-400 font-poppins">Change drawer titles, menu names, URLs and footer</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-[#090b14] p-3.5 rounded-2xl border border-slate-800 space-y-3">
+                        <div class="space-y-1">
+                            <label class="text-xs font-semibold text-slate-300 block">ড্রয়ার ও হেডারের মূল নাম (Brand Title):</label>
+                            <div class="relative flex items-center">
+                                <input type="text" id="drawer-brand-title" placeholder="প্রিমিয়াম কালেকশন" class="w-full bg-[#121526] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-white outline-none focus:border-sky-500">
+                                <button type="button" onclick="copyInputField('drawer-brand-title')" class="absolute right-2 bg-slate-800 hover:bg-sky-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1">
+                            <label class="text-xs font-semibold text-slate-300 block">ড্রয়ারের ছোট সাবটাইটেল (Subtitle):</label>
+                            <div class="relative flex items-center">
+                                <input type="text" id="drawer-subtitle" placeholder="Premium Collection Platform" class="w-full bg-[#121526] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-white outline-none focus:border-sky-500">
+                                <button type="button" onclick="copyInputField('drawer-subtitle')" class="absolute right-2 bg-slate-800 hover:bg-sky-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#090b14] p-3 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="text-[11px] font-bold text-pink-400 block flex items-center gap-1.5"><i class="fa-solid fa-home"></i> মেনু বাটন ১ (নাম ও লিংক):</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="menu-1-name" placeholder="নাম: Home" class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-white outline-none focus:border-pink-500">
+                            <input type="text" id="menu-1-url" placeholder="লিংক: /?home" class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-cyan-400 outline-none focus:border-pink-500 font-poppins">
+                        </div>
+                    </div>
+
+                    <div class="bg-[#090b14] p-3 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="text-[11px] font-bold text-sky-400 block flex items-center gap-1.5"><i class="fa-brands fa-telegram"></i> মেনু বাটন ২ (নাম ও টেলিগ্রাম লিংক):</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="menu-2-name" placeholder="নাম: Telegram Channel" class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-white outline-none focus:border-sky-500">
+                            <input type="url" id="menu-2-url" placeholder="লিংক: https://t.me/..." class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-cyan-400 outline-none focus:border-sky-500 font-poppins">
+                        </div>
+                    </div>
+
+                    <div class="bg-[#090b14] p-3 rounded-2xl border border-slate-800 space-y-2">
+                        <label class="text-[11px] font-bold text-emerald-400 block flex items-center gap-1.5"><i class="fa-solid fa-envelope"></i> মেনু বাটন ৩ (নাম ও লিংক):</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            <input type="text" id="menu-3-name" placeholder="নাম: Contact Us" class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-white outline-none focus:border-emerald-500">
+                            <input type="text" id="menu-3-url" placeholder="লিংক: /p/contact.html" class="bg-[#121526] border border-slate-700 p-2 rounded-xl text-xs text-cyan-400 outline-none focus:border-emerald-500 font-poppins">
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="saveDrawerMenuSettings()" class="w-full bg-gradient-to-r from-sky-600 to-blue-600 hover:opacity-90 active:scale-95 text-white text-xs font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-sky-600/25">
+                    <i class="fa-solid fa-floppy-disk"></i> সাইডবার মেনু ও লিংক সংরক্ষণ করুন
+                </button>
+                <p id="drawer-save-status" class="text-[11px] text-center text-emerald-400 hidden font-semibold"></p>
+            </div>
+        </div>
+
+        <!-- ৪. ফায়ারবেস কনফিগারেশন পরিবর্তন সেকশন -->
+        <div id="section-firebase" class="admin-section hidden space-y-4">
+            <div class="bg-[#121526] border border-amber-500/30 rounded-3xl p-6 shadow-xl space-y-5">
+                <div class="flex items-center gap-3 border-b border-slate-800 pb-3">
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-lg">
+                        <i class="fa-solid fa-fire"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-sm font-bold text-white">Firebase কনফিগ কোড সেটিংস</h2>
+                        <p class="text-[11px] text-slate-400 font-poppins">Connected Database (collection-cae5f)</p>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 block">Firebase Config Code:</label>
+                    <textarea id="fb-full-code-input" rows="8" class="w-full bg-[#090b14] border border-slate-700 p-3 rounded-2xl text-xs text-amber-300 font-mono outline-none focus:border-amber-500 transition"></textarea>
+                </div>
+
+                <div class="flex gap-3 pt-2">
+                    <button onclick="saveFirebaseFromFullCode()" class="flex-1 bg-gradient-to-r from-amber-600 to-orange-600 hover:opacity-90 active:scale-95 text-white text-xs font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-amber-600/25">
+                        <i class="fa-solid fa-arrows-rotate"></i> Firebase কনফিগ আপডেট করুন
+                    </button>
+                    <button onclick="resetFirebaseConfigDefault()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs px-4 py-3.5 rounded-2xl transition" title="Default Firebase এ রিসেট">
+                        রিসেট
+                    </button>
+                </div>
+                <p id="fb-save-status" class="text-[11px] text-center text-emerald-400 hidden font-semibold"></p>
+            </div>
+        </div>
+
+        <!-- ৫. ডোমেইন, টেলিগ্রাম ও ইউনিভার্সাল সার্ভার সেটিংস -->
+        <div id="section-settings" class="admin-section hidden space-y-4">
+            <div class="bg-[#121526] border border-slate-800 rounded-3xl p-6 shadow-xl space-y-5">
+                <h2 class="text-base font-bold text-white border-b border-slate-800 pb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-sliders text-cyan-400"></i> সার্ভার ও টেলিগ্রাম বট সেটিংস
+                </h2>
+
+                <div class="space-y-2">
+                    <label class="text-xs font-semibold text-slate-300 block">ওয়েবসাইটের মূল URL (ডোমেইন):</label>
+                    <div class="relative flex items-center">
+                        <input type="url" id="website-domain-input" placeholder="https://viralcollection26.blogspot.com" class="w-full bg-[#090b14] border border-slate-700 p-3.5 pr-12 rounded-2xl text-xs text-cyan-400 outline-none focus:border-cyan-500 font-poppins transition">
+                        <button type="button" onclick="copyInputField('website-domain-input')" class="absolute right-2.5 bg-slate-800 hover:bg-cyan-600 active:scale-90 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-xl text-xs transition border border-slate-700" title="কপি করুন">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- টেলিগ্রাম সেটিংস -->
+                <div class="p-4 bg-[#0a0e24] border border-cyan-500/30 rounded-2xl space-y-3.5">
+                    <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <i class="fa-brands fa-telegram text-cyan-400 text-base"></i>
+                        <span class="text-xs font-bold text-cyan-300">Telegram Cloud &amp; Streaming Worker সেটিংস (≤20 MB):</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-slate-300 block">Telegram Cloudflare Worker URL:</label>
+                        <div class="relative flex items-center">
+                            <input type="url" id="tg-worker-url-input" placeholder="https://jolly-water-2963.sksalamss6530.workers.dev" class="w-full bg-[#121526] border border-slate-700 p-3 pr-12 rounded-xl text-xs text-cyan-300 font-poppins outline-none focus:border-cyan-500">
+                            <button type="button" onclick="copyInputField('tg-worker-url-input')" class="absolute right-2.5 bg-slate-800 hover:bg-cyan-600 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs" title="কপি">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-slate-300 block">Telegram Bot Token:</label>
+                        <div class="relative flex items-center">
+                            <input type="text" id="tg-bot-token-input" placeholder="8743961700:AAEFRu774zqYIGSolrXw0yjX0gb6FpYNqgo" class="w-full bg-[#121526] border border-slate-700 p-3 pr-12 rounded-xl text-xs text-sky-300 font-poppins outline-none focus:border-cyan-500">
+                            <button type="button" onclick="copyInputField('tg-bot-token-input')" class="absolute right-2.5 bg-slate-800 hover:bg-sky-600 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs" title="কপি">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-slate-300 block">Telegram Chat ID:</label>
+                        <div class="relative flex items-center">
+                            <input type="text" id="tg-chat-id-input" placeholder="8672369316" class="w-full bg-[#121526] border border-slate-700 p-3 pr-12 rounded-xl text-xs text-pink-300 font-poppins outline-none focus:border-cyan-500">
+                            <button type="button" onclick="copyInputField('tg-chat-id-input')" class="absolute right-2.5 bg-slate-800 hover:bg-pink-600 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs" title="কপি">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Catbox সেটিংস -->
+                <div class="p-4 bg-[#0e1124] border border-purple-500/30 rounded-2xl space-y-3.5">
+                    <div class="flex items-center gap-2 border-b border-slate-800 pb-2">
+                        <i class="fa-solid fa-cat text-purple-400 text-base"></i>
+                        <span class="text-xs font-bold text-purple-300">Catbox Proxy সেটিংস (&gt;20 MB বড় ভিডিওর জন্য):</span>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-slate-300 block">Catbox Worker Proxy URL:</label>
+                        <div class="relative flex items-center">
+                            <input type="url" id="catbox-proxy-input" placeholder="https://holy-tooth-a19b.sk07771981.workers.dev" class="w-full bg-[#121526] border border-slate-700 p-3 pr-12 rounded-xl text-xs text-pink-400 outline-none focus:border-purple-500 font-poppins transition">
+                            <button type="button" onclick="copyInputField('catbox-proxy-input')" class="absolute right-2.5 bg-slate-800 hover:bg-pink-600 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs" title="কপি">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="space-y-1">
+                        <label class="text-[11px] font-semibold text-slate-300 block">Catbox Userhash:</label>
+                        <div class="relative flex items-center">
+                            <input type="text" id="catbox-userhash-input" placeholder="f87b7b92802d17f517bfa68e0" class="w-full bg-[#121526] border border-slate-700 p-3 pr-12 rounded-xl text-xs text-amber-400 outline-none focus:border-purple-500 font-poppins transition">
+                            <button type="button" onclick="copyInputField('catbox-userhash-input')" class="absolute right-2.5 bg-slate-800 hover:bg-amber-600 text-slate-300 hover:text-white px-2.5 py-1.5 rounded-lg text-xs" title="কপি">
+                                <i class="fa-solid fa-copy"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="saveAllServerSettings()" class="w-full bg-gradient-to-r from-cyan-600 via-teal-600 to-emerald-600 hover:opacity-95 active:scale-95 text-white text-xs font-bold py-3.5 rounded-2xl transition flex items-center justify-center gap-2 shadow-lg shadow-cyan-700/30">
+                    <i class="fa-solid fa-floppy-disk"></i> সকল সার্ভার সেটিংস সেভ করুন
+                </button>
+                <p id="server-save-status" class="text-[11px] text-center text-emerald-400 hidden font-semibold"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        // আপনার দেওয়া ফায়ারবেস কনফিগারেশন সরাসরি মাস্টার কনফিগ হিসেবে সেট করা হয়েছে
+        const DEFAULT_FIREBASE_CONFIG = {
+            apiKey: "AIzaSyAcNWSKmdEQrMJTdguRbD_0nTwP2ndXVAs",
+            authDomain: "collection-cae5f.firebaseapp.com",
+            databaseURL: "https://collection-cae5f-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "collection-cae5f",
+            storageBucket: "collection-cae5f.firebasestorage.app",
+            messagingSenderId: "349374892121",
+            appId: "1:349374892121:web:213ea0281bb95cf2358948",
+            measurementId: "G-TZPQH57YQ5"
+        };
+
+        // কোড এডিট করলে যাতে সরাসরি কার্যকর হয়, তাই এই কনফিগারেশন দিয়েই সরাসরি ইনিশিয়ালাইজ হবে
+        if (!firebase.apps.length) { 
+            firebase.initializeApp(DEFAULT_FIREBASE_CONFIG); 
+        }
+        let database = firebase.database();
+
+        const DEFAULT_TG_WORKER = "https://jolly-water-2963.sksalamss6530.workers.dev";
+        const DEFAULT_TG_TOKEN = "8743961700:AAEFRu774zqYIGSolrXw0yjX0gb6FpYNqgo";
+        const DEFAULT_TG_CHAT_ID = "8672369316";
+
+        const DEFAULT_CATBOX_PROXY = "https://holy-tooth-a19b.sk07771981.workers.dev";
+        const DEFAULT_CATBOX_USERHASH = "f87b7b92802d17f517bfa68e0";
+        let mainWebsiteDomain = "https://viralcollection26.blogspot.com";
+
+        function getTelegramWorkerUrl() {
+            let u = localStorage.getItem('app_tg_worker') || DEFAULT_TG_WORKER;
+            return u.trim().replace(/\/+$/, '');
+        }
+
+        function getTelegramBotToken() {
+            return (localStorage.getItem('app_bot_token') || DEFAULT_TG_TOKEN).trim();
+        }
+
+        function getTelegramChatId() {
+            return (localStorage.getItem('app_chat_id') || DEFAULT_TG_CHAT_ID).trim();
+        }
+
+        function getActiveProxyUrl() {
+            let p = localStorage.getItem('catbox_proxy_url') || DEFAULT_CATBOX_PROXY;
+            return p.trim().replace(/\/+$/, '');
+        }
+
+        function getActiveUserHash() {
+            return (localStorage.getItem('catbox_user_hash') || DEFAULT_CATBOX_USERHASH).trim();
+        }
+
+        let cachedAdminVideos = [];
+        let savedCategoriesList = [];
+        let editCategoryKey = null;
+
+        // ফ্রেম ক্যাপচার ও ডাউনলোড স্টেট
+        let primaryVideoFile = null;
+        let isManualThumbSet = false;
+        let localCapturedBlob = null;
+        let localCapturedDataUrl = "";
+        let currentFrameTime = 2;
+        let slotCounter = 0;
+
+        function showAdminToast(msg) {
+            const toast = document.getElementById('adminToast');
+            document.getElementById('adminToastMsg').innerText = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 1500);
+        }
+
+        function copyToClipboard(text) {
+            if (!text) return;
+            navigator.clipboard.writeText(text).then(() => showAdminToast("Copied!"));
+        }
+
+        function copyInputField(inputId) {
+            const el = document.getElementById(inputId);
+            if (!el || !el.value) return;
+            copyToClipboard(el.value.trim());
+        }
+
+        function copyMainPostLink(videoTitle, videoId) {
+            const cleanBase = mainWebsiteDomain.replace(/\/+$/, '');
+            const finalPostUrl = `${cleanBase}/?v=${encodeURIComponent(videoId)}`;
+            copyToClipboard(finalPostUrl);
+        }
+
+        function openSection(sectionId) {
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('sub-sections-container').classList.remove('hidden');
+            document.querySelectorAll('.admin-section').forEach(sec => sec.classList.add('hidden'));
+            document.getElementById(sectionId).classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function backToDashboard() {
+            document.getElementById('sub-sections-container').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            cancelEdit();
+            cancelCategoryEdit();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ==========================================
+        // ডাইনামিক ভিডিও স্লট ইঞ্জিন (লাইভ MB ও % সহ)
+        // ==========================================
+        function createSlotHTML(index) {
+            const isPrimary = (index === 1);
+            return `
+                <div id="video-slot-${index}" class="bg-[#121526] p-3 rounded-2xl border border-slate-800 space-y-2.5 shadow relative">
+                    <div class="flex justify-between items-center">
+                        <label class="text-[11px] font-bold ${isPrimary ? 'text-pink-400' : 'text-indigo-400'}">
+                            🎬 ভিডিও পার্ট ${index} ${isPrimary ? '(প্রধান)' : ''}:
+                        </label>
+                        <div class="flex items-center gap-2">
+                            <span id="video-metric-${index}" class="text-[10px] text-slate-400 font-mono">অপেক্ষিত</span>
+                            ${!isPrimary ? `
+                                <button type="button" onclick="removeVideoSlot(${index})" class="text-rose-400 hover:text-rose-300 text-xs px-1.5 py-0.5 rounded transition" title="মুছে ফেলুন">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            ` : ''}
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <label for="video-file-${index}" class="flex-1 bg-gradient-to-r ${isPrimary ? 'from-pink-600 via-purple-600 to-indigo-600' : 'from-indigo-600 to-purple-600'} hover:opacity-90 active:scale-95 text-white text-xs font-bold py-2.5 px-3 rounded-xl cursor-pointer flex items-center justify-center gap-1.5 shadow transition">
+                            <i class="fa-solid fa-file-video"></i> <span id="btnText${index}">ফাইল আপলোড</span>
+                        </label>
+                        <input type="file" id="video-file-${index}" accept="video/*" onchange="uploadSingleVideo(this, ${index})" class="hidden">
+                    </div>
+                    <div class="relative flex items-center">
+                        <input type="text" id="post-video-url-${index}" ${isPrimary ? 'onchange="autoFetchVideoDuration(this.value)"' : ''} placeholder="ভিডিও লিংক এখানে আসবে..." class="w-full bg-[#090b14] border border-slate-700 p-2.5 pr-11 rounded-xl text-xs text-white outline-none focus:border-pink-500 font-poppins">
+                        <button type="button" onclick="copyInputField('post-video-url-${index}')" class="absolute right-2 bg-slate-800 hover:bg-pink-600 active:scale-90 text-slate-300 hover:text-white px-2 py-1 rounded-lg text-xs transition border border-slate-700" title="কপি করুন">
+                            <i class="fa-solid fa-copy"></i>
+                        </button>
+                    </div>
+
+                    <!-- লাইভ MB, % এবং স্পিড প্রগ্রেস বার -->
+                    <div id="video-progress-${index}" class="hidden space-y-1.5 pt-1">
+                        <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden p-0.5 border border-slate-700/60">
+                            <div id="video-fill-${index}" class="bg-gradient-to-r from-cyan-400 via-pink-500 to-emerald-400 h-full w-0 transition-all duration-100 rounded-full"></div>
+                        </div>
+                        <p id="video-status-${index}" class="text-[10px] font-semibold text-cyan-300 text-center font-mono"></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function addNewVideoSlot() {
+            slotCounter++;
+            const container = document.getElementById('video-slots-container');
+            const slotWrapper = document.createElement('div');
+            slotWrapper.innerHTML = createSlotHTML(slotCounter);
+            container.appendChild(slotWrapper.firstElementChild);
+        }
+
+        function removeVideoSlot(index) {
+            const slotEl = document.getElementById(`video-slot-${index}`);
+            if (slotEl) slotEl.remove();
+        }
+
+        function resetVideoSlots(count = 1) {
+            const container = document.getElementById('video-slots-container');
+            container.innerHTML = '';
+            slotCounter = 0;
+            for (let i = 1; i <= count; i++) addNewVideoSlot();
+        }
+
+        // ==========================================
+        // গ্যালারি ডাউনলোড ইঞ্জিন (সরাসরি ১-ক্লিকে)
+        // ==========================================
+        function downloadThumbToGallery() {
+            if (isManualThumbSet) return;
+
+            if (localCapturedBlob) {
+                saveBlobDirect(localCapturedBlob);
+                return;
+            }
+            if (primaryVideoFile) {
+                captureFrameAtTime(primaryVideoFile, currentFrameTime, true);
+            }
+        }
+
+        function saveBlobDirect(blob) {
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = blobUrl;
+            a.download = `thumb_${Date.now()}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+            showAdminToast("গ্যালারিতে ডাউনলোড সম্পন্ন!");
+        }
+
+        function captureFrameAtTime(file, sec, triggerDownload = false) {
+            currentFrameTime = sec;
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(file);
+            video.muted = true;
+            video.playsInline = true;
+            video.preload = 'auto';
+
+            video.onloadedmetadata = function() {
+                let actual = sec;
+                if (video.duration && actual >= video.duration) actual = Math.max(0.5, video.duration - 0.5);
+                video.currentTime = actual;
+
+                const curM = Math.floor(actual / 60);
+                const curS = Math.floor(actual % 60);
+                const timeDisplay = document.getElementById('currentTimeDisplay');
+                timeDisplay.innerText = video.duration < 60 ? `${curS < 10 ? '0'+curS : curS}s` : `${curM < 10 ? '0'+curM : curM}m : ${curS < 10 ? '0'+curS : curS}s`;
+            };
+
+            video.onseeked = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = video.videoWidth || 640;
+                canvas.height = video.videoHeight || 360;
+                canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+
+                canvas.toBlob((blob) => {
+                    localCapturedBlob = blob;
+                    localCapturedDataUrl = canvas.toDataURL('image/jpeg', 0.90);
+                    
+                    document.getElementById('photo-preview-img').src = localCapturedDataUrl;
+                    document.getElementById('photo-preview-box').classList.remove('hidden');
+
+                    if (!isManualThumbSet) {
+                        document.getElementById('download-thumb-btn').classList.remove('hidden');
+                    }
+
+                    if (triggerDownload) {
+                        saveBlobDirect(blob);
+                    } else {
+                        uploadCapturedThumbToTelegram(blob);
+                    }
+                    URL.revokeObjectURL(video.src);
+                }, 'image/jpeg', 0.90);
+            };
+        }
+
+        function uploadCapturedThumbToTelegram(blob) {
+            const st = document.getElementById('photo-upload-status');
+            st.innerText = "⚡ ভিডিওর থাম্বনেইল ক্লাউডে সেভ হচ্ছে...";
+            const fd = new FormData();
+            fd.append('file', blob, 'video_thumb.jpg');
+            fd.append('bot_token', getTelegramBotToken());
+            fd.append('chat_id', getTelegramChatId());
+            fd.append('type', 'photo');
+
+            fetch(getTelegramWorkerUrl(), { method: 'POST', body: fd })
+            .then(r => r.json())
+            .then(d => {
+                if (d.ok && d.file_id) {
+                    document.getElementById('post-thumb-data').value = `${getTelegramWorkerUrl()}/?id=${d.file_id}&token=${getTelegramBotToken()}`;
+                    st.innerText = "✅ থাম্বনেইল প্রস্তুত";
+                }
+            }).catch(() => { st.innerText = ""; });
+        }
+
+        function setQuickTime(min, sec) {
+            document.getElementById('minuteInput').value = min;
+            document.getElementById('secondInput').value = sec;
+            if (primaryVideoFile) captureFrameAtTime(primaryVideoFile, (min * 60) + sec);
+        }
+
+        function applyCustomFrame() {
+            if (!primaryVideoFile) return;
+            const m = parseInt(document.getElementById('minuteInput').value) || 0;
+            const s = parseFloat(document.getElementById('secondInput').value) || 0;
+            captureFrameAtTime(primaryVideoFile, (m * 60) + s);
+        }
+
+        function handleTelegramPhotoUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            isManualThumbSet = true;
+            localCapturedBlob = null;
+            document.getElementById('frame-selector-box').classList.add('hidden');
+            document.getElementById('download-thumb-btn').classList.add('hidden');
+
+            document.getElementById('photo-preview-img').src = URL.createObjectURL(file);
+            document.getElementById('photo-preview-box').classList.remove('hidden');
+
+            const fd = new FormData();
+            fd.append('file', file);
+            fd.append('bot_token', getTelegramBotToken());
+            fd.append('chat_id', getTelegramChatId());
+            fd.append('type', 'photo');
+
+            fetch(getTelegramWorkerUrl(), { method: 'POST', body: fd })
+            .then(r => r.json()).then(d => {
+                if (d.ok && d.file_id) {
+                    document.getElementById('post-thumb-data').value = `${getTelegramWorkerUrl()}/?id=${d.file_id}&token=${getTelegramBotToken()}`;
+                }
+            });
+        }
+
+        function handleManualThumbUrl(url) {
+            if (url.trim()) {
+                isManualThumbSet = true;
+                localCapturedBlob = null;
+                document.getElementById('frame-selector-box').classList.add('hidden');
+                document.getElementById('download-thumb-btn').classList.add('hidden');
+                document.getElementById('photo-preview-img').src = url.trim();
+                document.getElementById('photo-preview-box').classList.remove('hidden');
+            }
+        }
+
+        // ==========================================
+        // লাইভ MB, % এবং স্পিড সহ ভিডিও আপলোড
+        // ==========================================
+        function uploadSingleVideo(input, index) {
+            const file = input.files[0];
+            if (!file) return;
+
+            if (index === 1) {
+                primaryVideoFile = file;
+                const v = document.createElement('video');
+                v.preload = 'metadata';
+                v.onloadedmetadata = function() {
+                    const m = Math.floor(v.duration / 60);
+                    const s = Math.floor(v.duration % 60);
+                    const durFormatted = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+                    document.getElementById('post-video-duration').value = durFormatted;
+                    document.getElementById('duration-status').innerText = `✅ Duration: ${durFormatted}`;
+
+                    if (!isManualThumbSet) {
+                        document.getElementById('frame-selector-box').classList.remove('hidden');
+                        document.getElementById('download-thumb-btn').classList.remove('hidden');
+
+                        if (v.duration < 60) {
+                            document.getElementById('minute-col').classList.add('hidden');
+                            document.getElementById('colon-separator').classList.add('hidden');
+                            document.getElementById('quick-1m-btn').classList.add('hidden');
+                            document.getElementById('quick-2m-btn').classList.add('hidden');
+                        } else {
+                            document.getElementById('minute-col').classList.remove('hidden');
+                            document.getElementById('colon-separator').classList.remove('hidden');
+                            document.getElementById('quick-1m-btn').classList.remove('hidden');
+                            document.getElementById('quick-2m-btn').classList.remove('hidden');
+                        }
+
+                        captureFrameAtTime(file, v.duration > 2 ? 2 : 0.5);
+                    }
+                    URL.revokeObjectURL(v.src);
+                };
+                v.src = URL.createObjectURL(file);
+            }
+
+            const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+            const isTG = file.size <= 20 * 1024 * 1024;
+            const wrap = document.getElementById(`video-progress-${index}`);
+            const fill = document.getElementById(`video-fill-${index}`);
+            const text = document.getElementById(`video-status-${index}`);
+            const metric = document.getElementById(`video-metric-${index}`);
+            const submitBtn = document.getElementById('submit-btn');
+
+            wrap.classList.remove('hidden');
+            fill.style.width = '0%';
+            metric.innerText = `${fileSizeMB} MB [${isTG ? 'TG' : 'Catbox'}]`;
+            submitBtn.disabled = true;
+
+            const fd = new FormData();
+            let endpoint = "";
+
+            if (isTG) {
+                fd.append('file', file);
+                fd.append('bot_token', getTelegramBotToken());
+                fd.append('chat_id', getTelegramChatId());
+                fd.append('type', 'video');
+                endpoint = getTelegramWorkerUrl();
+            } else {
+                fd.append('reqtype', 'fileupload');
+                fd.append('userhash', getActiveUserHash());
+                fd.append('fileToUpload', file);
+                endpoint = getActiveProxyUrl();
+            }
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', endpoint, true);
+            let startTime = Date.now();
+
+            xhr.upload.onprogress = (e) => {
+                if (e.lengthComputable) {
+                    const percent = Math.round((e.loaded / e.total) * 100);
+                    const loadedMB = (e.loaded / (1024 * 1024)).toFixed(2);
+                    const totalMB = (e.total / (1024 * 1024)).toFixed(2);
+                    const elapsedSec = (Date.now() - startTime) / 1000;
+                    const speedMbps = elapsedSec > 0 ? (e.loaded / (1024 * 1024) / elapsedSec).toFixed(1) : "0";
+
+                    fill.style.width = percent + '%';
+                    text.innerHTML = `⏳ আপলোড <b>${percent}%</b> (${loadedMB} MB / ${totalMB} MB) • ⚡ ${speedMbps} MB/s`;
+                    metric.innerText = `${loadedMB}/${totalMB} MB (${percent}%)`;
+                }
+            };
+
+            xhr.onload = () => {
+                submitBtn.disabled = false;
+                try {
+                    if (isTG) {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.ok && res.file_id) {
+                            document.getElementById(`post-video-url-${index}`).value = `${getTelegramWorkerUrl()}/?id=${res.file_id}&token=${getTelegramBotToken()}`;
+                            text.innerHTML = "✅ সম্পন্ন! ভিডিও ক্লাউডে সফলভাবে সেভ হয়েছে";
+                            text.className = "text-[10px] font-bold text-emerald-400 text-center font-mono";
+                        } else {
+                            text.innerHTML = "❌ ব্যর্থ হয়েছে! আবার চেষ্টা করুন";
+                            text.className = "text-[10px] font-bold text-rose-400 text-center font-mono";
+                        }
+                    } else {
+                        const r = xhr.responseText.trim();
+                        if (r.startsWith('http')) {
+                            document.getElementById(`post-video-url-${index}`).value = r;
+                            text.innerHTML = "✅ সম্পন্ন! Catbox-এ ভিডিও আপলোড সফল";
+                            text.className = "text-[10px] font-bold text-emerald-400 text-center font-mono";
+                        } else {
+                            text.innerHTML = "❌ ব্যর্থ হয়েছে!";
+                            text.className = "text-[10px] font-bold text-rose-400 text-center font-mono";
+                        }
+                    }
+                } catch(e) {
+                    text.innerHTML = "❌ ত্রুটি ঘটেছে!";
+                    text.className = "text-[10px] font-bold text-rose-400 text-center font-mono";
+                }
+            };
+
+            xhr.onerror = () => {
+                submitBtn.disabled = false;
+                text.innerHTML = "❌ নেটওয়ার্ক এরর!";
+                text.className = "text-[10px] font-bold text-rose-400 text-center font-mono";
+            };
+
+            xhr.send(fd);
+        }
+
+        function autoFetchVideoDuration(url) {
+            if (!url || !url.trim().startsWith('http')) return;
+            const videoEl = document.createElement('video');
+            videoEl.preload = 'metadata';
+            videoEl.onloadedmetadata = function() {
+                const m = Math.floor(videoEl.duration / 60);
+                const s = Math.floor(videoEl.duration % 60);
+                document.getElementById('post-video-duration').value = `${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            };
+            videoEl.src = url.trim();
+        }
+
+        // ==========================================
+        // পোস্ট সাবমিট ও লাইভ রেন্ডার (সবগুলো পোস্ট তালিকায় আসবে)
+        // ==========================================
+        function publishOrUpdatePost() {
+            const editId = document.getElementById('edit-post-id').value.trim();
+            const title = document.getElementById('post-title').value.trim();
+            const category = document.getElementById('post-category').value.trim() || 'General';
+            const thumb = document.getElementById('post-thumb-data').value.trim();
+            const duration = document.getElementById('post-video-duration').value.trim();
+            const downloadUrl = document.getElementById('post-download-url').value.trim();
+            const viewsInput = document.getElementById('post-views-data').value.trim();
+            const likesInput = document.getElementById('post-likes-data').value.trim();
+
+            const videoInputs = document.querySelectorAll('#video-slots-container input[id^="post-video-url-"]');
+            let primaryUrl = '';
+            const postData = { title, category, thumbnail1: thumb, duration, downloadUrl };
+
+            videoInputs.forEach((input, i) => {
+                const val = input.value.trim();
+                postData[`url${i+1}`] = val;
+                if (!primaryUrl && val) primaryUrl = val;
+            });
+            postData.url = primaryUrl;
+
+            if (!thumb) { alert("দয়া করে থাম্বনেইল দিন!"); return; }
+            if (!primaryUrl && !downloadUrl) { alert("ভিডিও লিংক দিন!"); return; }
+
+            const submitBtn = document.getElementById('submit-btn');
+            submitBtn.disabled = true;
+
+            let p;
+            if (editId) {
+                if (viewsInput !== '') postData.views = parseInt(viewsInput) || 0;
+                if (likesInput !== '') postData.likes = parseInt(likesInput) || 1;
+                p = database.ref('videos/' + editId).update(postData);
+            } else {
+                postData.views = 0;
+                postData.likes = 1;
+                postData.createdAt = Date.now();
+                p = database.ref('videos').push(postData);
+            }
+
+            p.then(() => {
+                submitBtn.disabled = false;
+                showAdminToast(editId ? "পোস্ট আপডেট হয়েছে!" : "পোস্ট সফলভাবে পাবলিশ হয়েছে!");
+                cancelEdit();
+            }).catch(err => {
+                submitBtn.disabled = false;
+                alert("Error: " + err.message);
+            });
+        }
+
+        // ফায়ারবেসের সকল পোস্ট সরাসরি লাইভ নিয়ে আসার ফাংশন
+        function fetchVideosListLive() {
+            database.ref('videos').on('value', (snap) => {
+                cachedAdminVideos = [];
+                if (snap.exists()) {
+                    snap.forEach(c => {
+                        const val = c.val();
+                        if (val) cachedAdminVideos.push({ id: c.key, ...val });
+                    });
+                    cachedAdminVideos.sort((a,b) => (b.createdAt || 0) - (a.createdAt || 0));
+                }
+                document.getElementById('dash-total-videos').innerText = `${cachedAdminVideos.length} Posts`;
+                document.getElementById('total-count').innerText = cachedAdminVideos.length;
+                renderAdminVideoList(cachedAdminVideos);
+            });
+        }
+
+        function renderAdminVideoList(videos) {
+            const container = document.getElementById('video-list-container');
+            container.innerHTML = '';
+
+            if (videos.length === 0) {
+                container.innerHTML = '<p class="text-xs text-center text-slate-500 py-8">কোনো পোস্ট পাওয়া যায়নি।</p>';
+                return;
+            }
+
+            videos.forEach(video => {
+                const actualThumbUrl = video.thumbnail1 || '';
+                const card = document.createElement('div');
+                card.className = "bg-[#101322] border border-slate-800/90 p-3.5 md:p-4 rounded-3xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 md:gap-4 shadow-lg hover:border-pink-500/40 transition";
+                const displayTitle = (video.title && video.title.trim() !== '') ? video.title : '<span class="text-slate-500 italic font-normal">(শিরোনামহীন পোস্ট)</span>';
+                const safeTitle = (video.title || '').replace(/'/g, "\\'");
+                
+                card.innerHTML = `
+                    <div class="flex items-center gap-3 w-full sm:w-auto flex-1 min-w-0">
+                        <div class="relative shrink-0 cursor-pointer" onclick="copyToClipboard('${actualThumbUrl}')" title="থাম্বনেইল লিংক কপি করুন">
+                            <img src="${actualThumbUrl}" referrerpolicy="no-referrer" class="w-16 h-12 md:w-20 md:h-16 object-cover rounded-2xl bg-slate-800 border border-slate-700/80 shadow">
+                        </div>
+
+                        <div class="flex-1 min-w-0 space-y-1">
+                            <h4 class="text-xs md:text-sm font-bold text-white truncate">${displayTitle}</h4>
+                            <div class="flex items-center gap-2 flex-wrap text-[10px] md:text-[11px]">
+                                <span class="text-pink-300 font-bold bg-pink-900/40 px-2.5 py-0.5 rounded-full border border-pink-500/30">
+                                    <i class="fa-solid fa-tag text-[9px] mr-1"></i>${video.category || 'General'}
+                                </span>
+                                <span class="text-emerald-400 font-poppins font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-eye text-emerald-400"></i> ${video.views || 0}
+                                </span>
+                                <span class="text-pink-400 font-poppins font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-thumbs-up text-pink-400"></i> ${video.likes || 1}
+                                </span>
+                                ${video.duration ? `
+                                <span class="text-cyan-400 font-poppins font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-clock text-cyan-400"></i> ${video.duration}
+                                </span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end shrink-0 border-t border-slate-800/80 pt-2.5 sm:pt-0 sm:border-0">
+                        <button onclick="copyMainPostLink('${safeTitle}', '${video.id}')" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 active:scale-95 text-white text-xs px-3 py-2 rounded-2xl transition flex items-center gap-1.5 shadow-lg shadow-emerald-900/40">
+                            <i class="fa-solid fa-link"></i> <span class="text-[11px] font-bold">পোস্ট লিংক</span>
+                        </button>
+
+                        <button onclick="editVideo('${video.id}')" class="bg-amber-600 hover:bg-amber-500 active:scale-95 text-white text-xs px-3 py-2 rounded-2xl transition shadow">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+
+                        <button onclick="deleteVideo('${video.id}')" class="bg-red-600 hover:bg-red-500 active:scale-95 text-white text-xs px-3 py-2 rounded-2xl transition shadow">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function filterAdminVideos() {
+            const query = document.getElementById('search-manage-input').value.toLowerCase();
+            const filtered = cachedAdminVideos.filter(v => (v.title || '').toLowerCase().includes(query) || (v.category || '').toLowerCase().includes(query));
+            renderAdminVideoList(filtered);
+        }
+
+        function editVideo(id) {
+            database.ref('videos/' + id).once('value', (snap) => {
+                if(!snap.exists()) return;
+                const v = snap.val();
+                document.getElementById('edit-post-id').value = id;
+                document.getElementById('post-title').value = v.title || '';
+                document.getElementById('post-category').value = v.category || '';
+                document.getElementById('post-thumb-data').value = v.thumbnail1 || '';
+                document.getElementById('photo-preview-img').src = v.thumbnail1 || '';
+                document.getElementById('photo-preview-box').classList.remove('hidden');
+
+                // এডিট করার সময় ফ্রেম সিলেক্টর ও ডাউনলোড বাটন হাইড থাকবে
+                isManualThumbSet = true;
+                localCapturedBlob = null;
+                document.getElementById('download-thumb-btn').classList.add('hidden');
+                document.getElementById('frame-selector-box').classList.add('hidden');
+
+                const urlsList = [];
+                for (let i = 1; i <= 20; i++) {
+                    const u = v[`url${i}`] || (i === 1 ? v.url || '' : '');
+                    if (u) urlsList.push(u);
+                }
+
+                resetVideoSlots(Math.max(1, urlsList.length));
+                urlsList.forEach((urlVal, idx) => {
+                    const el = document.getElementById(`post-video-url-${idx + 1}`);
+                    if (el) el.value = urlVal;
+                });
+
+                document.getElementById('post-video-duration').value = v.duration || '';
+                document.getElementById('post-download-url').value = v.downloadUrl || '';
+
+                document.getElementById('edit-views-wrapper').classList.remove('hidden');
+                document.getElementById('post-views-data').value = v.views || 0;
+                document.getElementById('post-likes-data').value = v.likes || 1;
+
+                document.getElementById('form-heading').innerHTML = '<i class="fa-solid fa-pen-to-square text-amber-400"></i> পোস্ট এডিট করুন';
+                document.getElementById('submit-btn-text').innerText = 'আপডেট সংরক্ষণ করুন';
+                document.getElementById('cancel-edit-btn').classList.remove('hidden');
+                document.getElementById('post-form-card').scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+
+        function cancelEdit() {
+            document.getElementById('edit-post-id').value = '';
+            document.getElementById('post-title').value = '';
+            document.getElementById('post-category').value = '';
+            document.getElementById('post-thumb-data').value = '';
+            document.getElementById('photo-upload-status').innerText = '';
+            document.getElementById('photo-preview-box').classList.add('hidden');
+            document.getElementById('download-thumb-btn').classList.add('hidden');
+            document.getElementById('frame-selector-box').classList.add('hidden');
+
+            primaryVideoFile = null;
+            isManualThumbSet = false;
+            localCapturedBlob = null;
+            localCapturedDataUrl = "";
+
+            resetVideoSlots(1);
+            document.getElementById('post-video-duration').value = '';
+            document.getElementById('post-download-url').value = '';
+            document.getElementById('edit-views-wrapper').classList.add('hidden');
+            document.getElementById('post-views-data').value = '';
+            document.getElementById('post-likes-data').value = '';
+
+            document.getElementById('form-heading').innerHTML = '<i class="fa-solid fa-cloud-arrow-up text-pink-500"></i> নতুন পোস্ট / ভিডিও তৈরি করুন';
+            document.getElementById('submit-btn-text').innerText = 'পোস্ট পাবলিশ করুন';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
+
+        function deleteVideo(id) {
+            if (confirm("⚠️ নিশ্চিত এই পোস্ট মুছে ফেলতে চান?")) {
+                database.ref('videos/' + id).remove();
+            }
+        }
+
+        // ==========================================
+        // ক্যাটাগরি ও সেটিংস হ্যান্ডলার
+        // ==========================================
+        function loadSavedCategories(selectedCategory = '') {
+            database.ref('categories').on('value', (snap) => {
+                savedCategoriesList = [];
+                const container = document.getElementById('saved-categories-container');
+                const selectDropdown = document.getElementById('post-category');
+                container.innerHTML = '';
+                selectDropdown.innerHTML = '<option value="">-- ক্যাটাগরি সিলেক্ট করুন (ডিফল্ট: General) --</option>';
+
+                if (snap.exists()) {
+                    snap.forEach(child => {
+                        const val = child.val();
+                        const catName = typeof val === 'object' ? (val.name || '') : val;
+                        if (catName) savedCategoriesList.push({ id: child.key, name: catName });
+                    });
+                }
+
+                document.getElementById('dash-total-cats').innerText = `${savedCategoriesList.length} Categories`;
+
+                savedCategoriesList.forEach(cat => {
+                    const card = document.createElement('div');
+                    card.className = "bg-[#090b14] border border-slate-800 px-3.5 py-2.5 rounded-2xl flex items-center justify-between gap-2 shadow";
+                    card.innerHTML = `
+                        <span class="text-xs font-bold text-white truncate"><i class="fa-solid fa-tag text-pink-400 mr-1.5"></i> ${cat.name}</span>
+                        <div class="flex items-center gap-1.5 shrink-0">
+                            <button onclick="editCategory('${cat.id}', '${cat.name.replace(/'/g, "\\'")}')" class="bg-amber-600/20 text-amber-400 px-2.5 py-1 rounded-lg text-xs"><i class="fa-solid fa-pen"></i></button>
+                            <button onclick="database.ref('categories/${cat.id}').remove()" class="bg-red-600/20 text-red-400 px-2.5 py-1 rounded-lg text-xs"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    `;
+                    container.appendChild(card);
+
+                    const opt = document.createElement('option');
+                    opt.value = cat.name;
+                    opt.innerText = cat.name;
+                    if (selectedCategory && cat.name.toLowerCase() === selectedCategory.toLowerCase()) opt.selected = true;
+                    selectDropdown.appendChild(opt);
+                });
+            });
+        }
+
+        function saveOrUpdateCategory() {
+            const input = document.getElementById('new-category-input');
+            const name = input.value.trim();
+            if (!name) return;
+            if (editCategoryKey) {
+                database.ref('categories/' + editCategoryKey).set(name).then(() => cancelCategoryEdit());
+            } else {
+                database.ref('categories').push(name).then(() => { input.value = ''; });
+            }
+        }
+
+        function editCategory(catId, currentName) {
+            editCategoryKey = catId;
+            document.getElementById('new-category-input').value = currentName;
+            document.getElementById('cat-btn-text').innerText = 'আপডেট করুন';
+            document.getElementById('cancel-cat-btn').classList.remove('hidden');
+        }
+
+        function cancelCategoryEdit() {
+            editCategoryKey = null;
+            document.getElementById('new-category-input').value = '';
+            document.getElementById('cat-btn-text').innerText = 'ক্যাটাগরি যুক্ত করুন';
+            document.getElementById('cancel-cat-btn').classList.add('hidden');
+        }
+
+        function saveDrawerMenuSettings() {
+            const drawerData = {
+                title: document.getElementById('drawer-brand-title').value.trim() || 'VIRAL COLLECTION 26',
+                subtitle: document.getElementById('drawer-subtitle').value.trim() || 'Premium Collection Platform',
+                menu1_name: document.getElementById('menu-1-name').value.trim() || 'Home',
+                menu1_url: document.getElementById('menu-1-url').value.trim() || '/?home',
+                menu2_name: document.getElementById('menu-2-name').value.trim() || 'Telegram Channel',
+                menu2_url: document.getElementById('menu-2-url').value.trim(),
+                menu3_name: document.getElementById('menu-3-name').value.trim() || 'Contact Us',
+                menu3_url: document.getElementById('menu-3-url').value.trim() || '/p/contact.html'
+            };
+            database.ref('settings/drawerMenu').set(drawerData).then(() => {
+                showAdminToast("ড্রয়ার সেটিংস সংরক্ষিত হয়েছে!");
+            });
+        }
+
+        function saveAllServerSettings() {
+            let dom = document.getElementById('website-domain-input').value.trim() || mainWebsiteDomain;
+            let tgWorker = document.getElementById('tg-worker-url-input').value.trim() || DEFAULT_TG_WORKER;
+            let tgToken = document.getElementById('tg-bot-token-input').value.trim() || DEFAULT_TG_TOKEN;
+            let tgChat = document.getElementById('tg-chat-id-input').value.trim() || DEFAULT_TG_CHAT_ID;
+            let proxyUrl = document.getElementById('catbox-proxy-input').value.trim() || DEFAULT_CATBOX_PROXY;
+            let userhash = document.getElementById('catbox-userhash-input').value.trim() || DEFAULT_CATBOX_USERHASH;
+
+            localStorage.setItem('app_blog_domain', dom);
+            localStorage.setItem('app_tg_worker', tgWorker);
+            localStorage.setItem('app_bot_token', tgToken);
+            localStorage.setItem('app_chat_id', tgChat);
+            localStorage.setItem('catbox_proxy_url', proxyUrl);
+            localStorage.setItem('catbox_user_hash', userhash);
+
+            Promise.all([
+                database.ref('settings/websiteDomain').set(dom),
+                database.ref('settings/telegramConfig').set({ workerUrl: tgWorker, botToken: tgToken, chatId: tgChat }),
+                database.ref('settings/catboxConfig').set({ proxyUrl: proxyUrl, userhash: userhash })
+            ]).then(() => {
+                showAdminToast("সকল সার্ভার সেটিংস সেভ হয়েছে!");
+            });
+        }
+
+        function saveFirebaseFromFullCode() {
+            const rawText = document.getElementById('fb-full-code-input').value.trim();
+            if (!rawText) return;
+            try {
+                let parsedConfig = JSON.parse(rawText);
+                localStorage.setItem('custom_firebase_config_collection_cae5f', JSON.stringify(parsedConfig));
+                showAdminToast("Firebase সংরক্ষিত হয়েছে!");
+                setTimeout(() => location.reload(), 1000);
+            } catch(e) { alert("ভুল ফরম্যাট!"); }
+        }
+
+        function resetFirebaseConfigDefault() {
+            if (confirm("ডিফল্ট Firebase এ রিসেট করবেন?")) {
+                localStorage.removeItem('custom_firebase_config_collection_cae5f');
+                location.reload();
+            }
+        }
+
+        window.onload = function() {
+            document.getElementById('fb-full-code-input').value = JSON.stringify(DEFAULT_FIREBASE_CONFIG, null, 2);
+            document.getElementById('website-domain-input').value = localStorage.getItem('app_blog_domain') || mainWebsiteDomain;
+            document.getElementById('tg-worker-url-input').value = getTelegramWorkerUrl();
+            document.getElementById('tg-bot-token-input').value = getTelegramBotToken();
+            document.getElementById('tg-chat-id-input').value = getTelegramChatId();
+            document.getElementById('catbox-proxy-input').value = getActiveProxyUrl();
+            document.getElementById('catbox-userhash-input').value = getActiveUserHash();
+
+            loadSavedCategories();
+            fetchVideosListLive();
+            resetVideoSlots(1);
+        };
+    </script>
+</body>
+</html>
